@@ -15,11 +15,14 @@ class myDateTime:
     def isAfter(self,other):
         if (isinstance(other,myDateTime)):
             if (other.month() > self._month):
-                return true
+                return True
             elif (other.month() < self._month):
-                return false
+                return False
             else:
                 return (other.day() > self._day)
+
+    def toString(self):
+        return self._month + "/" + self._day
 
 class Employee:
     
@@ -34,6 +37,7 @@ class Employee:
         self._lastName = lname
         self._age = age
         self._permanentDays = pdays
+        self._requestedDays = set()
     
     def setFirstName(self,name):
         self._firstName = name
@@ -66,8 +70,15 @@ class Employee:
         return (self._age >= 18)
 
     def addReqDay(self,day):
-        self._requestedDays |= day
+        self._requestedDays |= {day}
 
     def getReqDays(self):
         return self._requestedDays
+
+    def removeReqDaysBefore(self,day):
+        for x in self._requestedDays.copy():
+            if (not day.isAfter(x)):
+                self._requestedDays.remove(x)      
+
+
 

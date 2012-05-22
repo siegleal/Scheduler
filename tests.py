@@ -2,11 +2,12 @@ import unittest
 import Employee
 
 class EmployeeTestCase(unittest.TestCase):
-    
-    e = None
 
     def setUp(self):
         self.e = Employee.Employee("Test","Name",18,set())
+        
+    def tearDown(self):
+        self.e = None
         
     def testFirstName(self):
         self.assertEqual(self.e.getFirstName(),"Test")
@@ -32,11 +33,24 @@ class EmployeeTestCase(unittest.TestCase):
 
     def testRequestedDays(self):
         day = Employee.myDateTime(1,1)
-        self.e.addReqDay(set(day))
-        self.assertEqual(self.e.getReqDays(),set(day))
+        self.e.addReqDay(day)
+        self.assertEqual(self.e.getReqDays(),{day})
+
+    def testRemoveDaysAfter(self):
+        day = Employee.myDateTime(6,6)
+        day2 = Employee.myDateTime(3,3)
+        middleDay = Employee.myDateTime(3,3)
+        self.e.addReqDay(day)
+        self.e.addReqDay(day2)
+        self.assertTrue(len(self.e.getReqDays()) == 2)
+        self.e.removeReqDaysBefore(middleDay)
+        self.assertTrue(len(self.e.getReqDays()) == 1)
+        self.assertEqual(self.e.getReqDays(),{day})
         
 
 
+
+    
 if __name__ == '__main__':
     try: unittest.main()
     except SystemExit: pass
